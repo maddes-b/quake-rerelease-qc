@@ -35,7 +35,7 @@ void() SetMovedir =
         self.movedir = '0 0 -1';
     else
     {
-        makevectorsfixed(self.angles);
+        makevectors(self.angles);
         self.movedir = v_forward;
     }
 
