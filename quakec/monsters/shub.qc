@@ -40,11 +40,11 @@ void() finale_6;
 
 entity	shub;
 
-$frame old1 old2 old3 old4 old5 old6 old7 old8 old9 
-$frame old10 old11 old12 old13 old14 old15 old16 old17 old18 old19 
-$frame old20 old21 old22 old23 old24 old25 old26 old27 old28 old29 
-$frame old30 old31 old32 old33 old34 old35 old36 old37 old38 old39 
-$frame old40 old41 old42 old43 old44 old45 old46 
+$frame old1 old2 old3 old4 old5 old6 old7 old8 old9
+$frame old10 old11 old12 old13 old14 old15 old16 old17 old18 old19
+$frame old20 old21 old22 old23 old24 old25 old26 old27 old28 old29
+$frame old30 old31 old32 old33 old34 old35 old36 old37 old38 old39
+$frame old40 old41 old42 old43 old44 old45 old46
 
 $frame shake1 shake2 shake3 shake4 shake5 shake6 shake7 shake8
 $frame shake9 shake10 shake11 shake12 shake13 shake14 shake15
@@ -115,11 +115,11 @@ void() old_thrash12       =[      $shake12, old_thrash13      ] {lightstyle(0, "
 void() old_thrash13       =[      $shake13, old_thrash14      ] {lightstyle(0, "k");};
 void() old_thrash14       =[      $shake14, old_thrash15      ] {lightstyle(0, "m");};
 void() old_thrash15       =[      $shake15, old_thrash16      ] {
-	lightstyle(0, "m");
-	self.cnt = self.cnt + 1;
+    lightstyle(0, "m");
+    self.cnt = self.cnt + 1;
 
-	if (self.cnt != 3)
-		self.think = old_thrash1;
+    if (self.cnt != 3)
+        self.think = old_thrash1;
 };
 
 void() old_thrash16       =[      $shake16, old_thrash17      ] {lightstyle(0, "g");};
@@ -132,178 +132,178 @@ void() old_thrash20       =[      $shake20, old_thrash20      ] {finale_4();};
 
 void() finale_1 =
 {
-	local entity	pos, pl;
-	local entity	timer;
+    local entity	pos, pl;
+    local entity	timer;
 
-	intermission_exittime = time + 10000000;	// never allow exit
-	intermission_running = 1;
+    intermission_exittime = time + 10000000;	// never allow exit
+    intermission_running = 1;
 
-	// find the intermission spot
-	pos = find (world, classname, "info_intermission");
+    // find the intermission spot
+    pos = find (world, classname, "info_intermission");
 
-	if (!pos)
-		error ("no info_intermission");
+    if (!pos)
+        error ("no info_intermission");
 
-	pl = find (world, classname, "misc_teleporttrain");
+    pl = find (world, classname, "misc_teleporttrain");
 
-	if (!pl)
-		error ("no teleporttrain");
-	remove (pl);
+    if (!pl)
+        error ("no teleporttrain");
+    remove (pl);
 
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, string_null);
+    WriteByte (MSG_ALL, SVC_FINALE);
+    WriteString (MSG_ALL, string_null);
 
-	pl = find (world, classname, "player");
+    pl = find (world, classname, "player");
 
-	while (pl != world)
-	{
-		pl.view_ofs = '0 0 0';
-		pl.angles = other.v_angle = pos.mangle;
-		pl.fixangle = TRUE;		// turn this way immediately
-		pl.map = self.map;
-		pl.nextthink = time + 0.5;
-		pl.takedamage = DAMAGE_NO;
-		pl.solid = SOLID_NOT;
-		pl.movetype = MOVETYPE_NONE;
-		pl.modelindex = 0;
-		setorigin (pl, pos.origin);
-		pl = find (pl, classname, "player");
-	}	
-	
-	// make fake versions of all players as standins, and move the real
-	// players to the intermission spot
-	
-	// wait for 1 second
-	timer = spawn();
-	timer.nextthink = time + 1;
-	timer.think = finale_2;	
+    while (pl != world)
+    {
+        pl.view_ofs = '0 0 0';
+        pl.angles = other.v_angle = pos.mangle;
+        pl.fixangle = TRUE;		// turn this way immediately
+        pl.map = self.map;
+        pl.nextthink = time + 0.5;
+        pl.takedamage = DAMAGE_NO;
+        pl.solid = SOLID_NOT;
+        pl.movetype = MOVETYPE_NONE;
+        pl.modelindex = 0;
+        setorigin (pl, pos.origin);
+        pl = find (pl, classname, "player");
+    }
 
-	if (campaign && world.model == "maps/end.bsp")
-	{
-		WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
-		WriteString(MSG_ALL, "ACH_DEFEAT_SHUB");
- 		if (skill == 3)
- 		{
-	 		WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
-	 		WriteString(MSG_ALL, "ACH_DEFEAT_SHUB_NIGHTMARE"); 			
- 		}
-	}
+    // make fake versions of all players as standins, and move the real
+    // players to the intermission spot
+
+    // wait for 1 second
+    timer = spawn();
+    timer.nextthink = time + 1;
+    timer.think = finale_2;
+
+    if (campaign && world.model == "maps/end.bsp")
+    {
+        WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+        WriteString(MSG_ALL, "ACH_DEFEAT_SHUB");
+         if (skill == 3)
+         {
+             WriteByte (MSG_ALL, SVC_ACHIEVEMENT);
+             WriteString(MSG_ALL, "ACH_DEFEAT_SHUB_NIGHTMARE");
+         }
+    }
 };
 
 void() finale_2 =
 {
-	local vector	o;
+    local vector	o;
 
-	// start a teleport splash inside shub
+    // start a teleport splash inside shub
 
-	o = shub.origin - '0 100 0';
-	WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
-	WriteByte (MSG_BROADCAST, TE_TELEPORT);
-	WriteCoord (MSG_BROADCAST, o_x);
-	WriteCoord (MSG_BROADCAST, o_y);
-	WriteCoord (MSG_BROADCAST, o_z);
+    o = shub.origin - '0 100 0';
+    WriteByte (MSG_BROADCAST, SVC_TEMPENTITY);
+    WriteByte (MSG_BROADCAST, TE_TELEPORT);
+    WriteCoord (MSG_BROADCAST, o_x);
+    WriteCoord (MSG_BROADCAST, o_y);
+    WriteCoord (MSG_BROADCAST, o_z);
 
-	sound (shub, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
-	
-	self.nextthink = time + 2;
-	self.think = finale_3;
+    sound (shub, CHAN_VOICE, "misc/r_tele1.wav", 1, ATTN_NORM);
+
+    self.nextthink = time + 2;
+    self.think = finale_3;
 };
 
 void() finale_3 =
 {
-	// start shub thrashing wildly
-	shub.think = old_thrash1;
-	sound (shub, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
-	lightstyle(0, "abcdefghijklmlkjihgfedcb");	
+    // start shub thrashing wildly
+    shub.think = old_thrash1;
+    sound (shub, CHAN_VOICE, "boss2/death.wav", 1, ATTN_NORM);
+    lightstyle(0, "abcdefghijklmlkjihgfedcb");
 };
 
 void() finale_4 =
 {
-	// throw tons of meat chunks	
-	local	vector	oldo;
-	local	float	x, y, z;
-	local	float	r;
-	local entity	n;
+    // throw tons of meat chunks
+    local	vector	oldo;
+    local	float	x, y, z;
+    local	float	r;
+    local entity	n;
 
-	sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM);
-	
-	oldo = self.origin;
+    sound (self, CHAN_VOICE, "boss2/pop2.wav", 1, ATTN_NORM);
 
-	z = 16;
-	while (z <= 144)
-	{
-		x = -64;
-		while (x <= 64)
-		{
-			y = -64;
-			while (y <= 64)
-			{
-				self.origin_x = oldo_x + x;
-				self.origin_y = oldo_y + y;
-				self.origin_z = oldo_z + z;
+    oldo = self.origin;
 
-				r = random();
+    z = 16;
+    while (z <= 144)
+    {
+        x = -64;
+        while (x <= 64)
+        {
+            y = -64;
+            while (y <= 64)
+            {
+                self.origin_x = oldo_x + x;
+                self.origin_y = oldo_y + y;
+                self.origin_z = oldo_z + z;
 
-				if (r < 0.3)				
-					ThrowGib ("progs/gib1.mdl", -999);
-				else if (r < 0.6)
-					ThrowGib ("progs/gib2.mdl", -999);
-				else
-					ThrowGib ("progs/gib3.mdl", -999);
+                r = random();
 
-				y = y + 32;
-			}
+                if (r < 0.3)
+                    ThrowGib ("progs/gib1.mdl", -999);
+                else if (r < 0.6)
+                    ThrowGib ("progs/gib2.mdl", -999);
+                else
+                    ThrowGib ("progs/gib3.mdl", -999);
 
-			x = x + 32;
-		}
+                y = y + 32;
+            }
 
-		z = z + 96;
-	}
+            x = x + 32;
+        }
 
-	// start the end text
-	WriteByte (MSG_ALL, SVC_FINALE);
-	WriteString (MSG_ALL, "$qc_finale_end");
+        z = z + 96;
+    }
+
+    // start the end text
+    WriteByte (MSG_ALL, SVC_FINALE);
+    WriteString (MSG_ALL, "$qc_finale_end");
 
 // put a player model down
-	n = spawn();
-	setmodel (n, "progs/player.mdl");
-	oldo = oldo - '32 264 0';
-	setorigin (n, oldo);
-	n.angles = '0 290 0';
-	n.frame = 1;
+    n = spawn();
+    setmodel (n, "progs/player.mdl");
+    oldo = oldo - '32 264 0';
+    setorigin (n, oldo);
+    n.angles = '0 290 0';
+    n.frame = 1;
 
-	remove (self);
+    remove (self);
 
 // switch cd track
-	WriteByte (MSG_ALL, SVC_CDTRACK);
-	WriteByte (MSG_ALL, 3);
-	WriteByte (MSG_ALL, 3);
-	lightstyle(0, "m");
-	
-	// instead of sitting here forever, run the quake ex credits and send the user back to start
-	local entity timer = spawn();
-	timer.nextthink = time + 1;
-	timer.think = finale_5;	
+    WriteByte (MSG_ALL, SVC_CDTRACK);
+    WriteByte (MSG_ALL, 3);
+    WriteByte (MSG_ALL, 3);
+    lightstyle(0, "m");
+
+    // instead of sitting here forever, run the quake ex credits and send the user back to start
+    local entity timer = spawn();
+    timer.nextthink = time + 1;
+    timer.think = finale_5;
 };
 
 void() finale_5 =
 {
-	if (finaleFinished()) {
-		self.nextthink = time + 5;
-		self.think = finale_6;
-	} else {
-		self.nextthink = time + 0.1;
-	}
+    if (finaleFinished()) {
+        self.nextthink = time + 5;
+        self.think = finale_6;
+    } else {
+        self.nextthink = time + 0.1;
+    }
 }
 
-void() finale_6 = 
+void() finale_6 =
 {
-	if (!coop) {
-		localcmd("menu_credits\n");
-		localcmd("disconnect\n");
-	} else {
-		changelevel("start");
-	}
+    if (!coop) {
+        localcmd("menu_credits\n");
+        localcmd("disconnect\n");
+    } else {
+        changelevel("start");
+    }
 }
 
 //============================================================================
@@ -313,37 +313,37 @@ void() finale_6 =
 */
 void() monster_oldone =
 {
-	if (deathmatch)
-	{
-		remove(self);
-		return;
-	}
+    if (deathmatch)
+    {
+        remove(self);
+        return;
+    }
 
-	precache_model2 ("progs/oldone.mdl");
+    precache_model2 ("progs/oldone.mdl");
 
-	precache_sound2 ("boss2/death.wav");
-	precache_sound2 ("boss2/idle.wav");
-	precache_sound2 ("boss2/sight.wav");
-	precache_sound2 ("boss2/pop2.wav");
+    precache_sound2 ("boss2/death.wav");
+    precache_sound2 ("boss2/idle.wav");
+    precache_sound2 ("boss2/sight.wav");
+    precache_sound2 ("boss2/pop2.wav");
 
-	self.solid = SOLID_SLIDEBOX;
-	self.movetype = MOVETYPE_STEP;
-	
-	setmodel (self, "progs/oldone.mdl");
-	self.netname = "$qc_shub";
-	self.killstring = "$qc_ks_shub";
+    self.solid = SOLID_SLIDEBOX;
+    self.movetype = MOVETYPE_STEP;
 
-	setsize (self, '-160 -128 -24', '160 128 256');
+    setmodel (self, "progs/oldone.mdl");
+    self.netname = "$qc_shub";
+    self.killstring = "$qc_ks_shub";
 
-	self.health = 40000;		// kill by telefrag
-	self.max_health = 40000;	// kill by telefrag
-	self.think = old_idle1;
-	self.nextthink = time + 0.1;	
-	self.takedamage = DAMAGE_YES;
-	self.th_pain = SUB_Null;
-	self.th_die = finale_1;
-	shub = self;
-	
-	total_monsters = total_monsters + 1;
+    setsize (self, '-160 -128 -24', '160 128 256');
+
+    self.health = 40000;		// kill by telefrag
+    self.max_health = 40000;	// kill by telefrag
+    self.think = old_idle1;
+    self.nextthink = time + 0.1;
+    self.takedamage = DAMAGE_YES;
+    self.th_pain = SUB_Null;
+    self.th_die = finale_1;
+    shub = self;
+
+    total_monsters = total_monsters + 1;
 };
 

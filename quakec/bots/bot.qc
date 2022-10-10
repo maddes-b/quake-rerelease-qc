@@ -27,12 +27,12 @@ NOTE: "self" will be the calling bot
 
 Example usages of this function:
 
-	1. Telling bots what to do or where to go ( i.e. setting a high level goal ).
-	2. Modifying properties on the bot player ( or other players in-game ) that the bots can see/use doing their update.
+    1. Telling bots what to do or where to go ( i.e. setting a high level goal ).
+    2. Modifying properties on the bot player ( or other players in-game ) that the bots can see/use doing their update.
 ========================
 */
 void Bot_PreThink() {
-	// add your code here!
+    // add your code here!
 };
 
 /*
@@ -45,10 +45,10 @@ NOTE: "self" will be the calling bot
 
 Example usages of this function:
 
-	1. Overriding/modifying bot user cmds.
-	2. Overriding/modifying bot player properties.
+    1. Overriding/modifying bot user cmds.
+    2. Overriding/modifying bot player properties.
 ========================
 */
 void Bot_PostThink() {
-	// add your code here!
+    // add your code here!
 };
