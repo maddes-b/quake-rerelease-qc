@@ -28,11 +28,11 @@ monsters/rottweiler.qc
 monsters/zombie.qc
 monsters/chthon.qc
 
-monsters/spawn.qc		// registered
-monsters/hellknight.qc	// registered
-monsters/rotfish.qc		// registered
-monsters/vore.qc		// registered
-monsters/enforcer.qc	// registered
-monsters/shub.qc		// registered
+monsters/spawn.qc       // registered
+monsters/hellknight.qc  // registered
+monsters/rotfish.qc     // registered
+monsters/vore.qc        // registered
+monsters/enforcer.qc    // registered
+monsters/shub.qc        // registered
 
-bots/bot.qc				// bot support
+bots/bot.qc // bot support

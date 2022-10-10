@@ -19,7 +19,8 @@
 
 void() SUB_Null = {};
 
-void() SUB_Remove = {remove(self);};
+
+void() SUB_Remove = { remove(self); };
 
 
 /*
@@ -41,6 +42,7 @@ void() SetMovedir =
     self.angles = '0 0 0';
 };
 
+
 /*
 ================
 InitTrigger
@@ -51,14 +53,14 @@ void() InitTrigger =
     // trigger angles are used for one-way touches.  An angle of 0 is assumed
     // to mean no restrictions, so use a yaw of 360 instead.
     if (self.angles != '0 0 0')
-        SetMovedir ();
-
+        SetMovedir();
     self.solid = SOLID_TRIGGER;
-    setmodel (self, self.model);	// set size and link into world
+    setmodel(self, self.model); // set size and link into world
     self.movetype = MOVETYPE_NONE;
     self.modelindex = 0;
     self.model = string_null;
 };
+
 
 /*
 =============
@@ -70,18 +72,20 @@ self.origin traveling at speed
 */
 void(entity ent, vector tdest, float tspeed, void() func) SUB_CalcMoveEnt =
 {
-    local entity	stemp;
+    local entity stemp;
+
     stemp = self;
     self = ent;
 
-    SUB_CalcMove (tdest, tspeed, func);
+    SUB_CalcMove(tdest, tspeed, func);
     self = stemp;
 };
 
+
 void(vector tdest, float tspeed, void() func) SUB_CalcMove =
 {
-    local vector	vdestdelta;
-    local float		len, traveltime;
+    local vector vdestdelta;
+    local float len, traveltime;
 
     if (!tspeed)
         objerror("No speed is defined!");
@@ -101,7 +105,7 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
     vdestdelta = tdest - self.origin;
 
     // calculate length of vector
-    len = vlen (vdestdelta);
+    len = vlen(vdestdelta);
 
     // divide by speed to get time to reach dest
     traveltime = len / tspeed;
@@ -117,20 +121,20 @@ void(vector tdest, float tspeed, void() func) SUB_CalcMove =
     self.nextthink = self.ltime + traveltime;
 
     // scale the destdelta vector by the time spent traveling to get velocity
-    self.velocity = vdestdelta * (1/traveltime);	// qcc won't take vec/float
+    self.velocity = vdestdelta * (1 / traveltime); // qcc won't take vec/float
 };
+
 
 /*
 ============
 After moving, set origin to exact final destination
 ============
 */
-void()  SUB_CalcMoveDone =
+void() SUB_CalcMoveDone =
 {
     setorigin(self, self.finaldest);
     self.velocity = '0 0 0';
     self.nextthink = -1;
-
     if (self.think1)
         self.think1();
 };
@@ -148,17 +152,19 @@ The calling function should make sure self.think is valid
 */
 void(entity ent, vector destangle, float tspeed, void() func) SUB_CalcAngleMoveEnt =
 {
-    local entity		stemp;
+    local entity stemp;
+
     stemp = self;
     self = ent;
-    SUB_CalcAngleMove (destangle, tspeed, func);
+    SUB_CalcAngleMove(destangle, tspeed, func);
     self = stemp;
 };
 
+
 void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
 {
-    local vector	destdelta;
-    local float		len, traveltime;
+    local vector destdelta;
+    local float len, traveltime;
 
     if (!tspeed)
         objerror("No speed is defined!");
@@ -167,7 +173,7 @@ void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
     destdelta = destangle - self.angles;
 
     // calculate length of vector
-    len = vlen (destdelta);
+    len = vlen(destdelta);
 
     // divide by speed to get time to reach dest
     traveltime = len / tspeed;
@@ -183,6 +189,7 @@ void(vector destangle, float tspeed, void() func) SUB_CalcAngleMove =
     self.think = SUB_CalcAngleMoveDone;
 };
 
+
 /*
 ============
 After rotating, set angle to exact final angle
@@ -193,7 +200,6 @@ void() SUB_CalcAngleMoveDone =
     self.angles = self.finalangle;
     self.avelocity = '0 0 0';
     self.nextthink = -1;
-
     if (self.think1)
         self.think1();
 };
@@ -204,9 +210,10 @@ void() SUB_CalcAngleMoveDone =
 void() DelayThink =
 {
     activator = self.enemy;
-    SUB_UseTargets ();
+    SUB_UseTargets();
     remove(self);
 };
+
 
 /*
 ==============================
@@ -231,9 +238,9 @@ void() SUB_UseTargets =
 {
     local entity t, act, stemp, otemp;
 
-//
-// check for a delay
-//
+    //
+    // check for a delay
+    //
     if (self.delay)
     {
         // create a temp object to fire at a later time
@@ -248,16 +255,14 @@ void() SUB_UseTargets =
         return;
     }
 
-
-//
-// print the message
-//
+    //
+    // print the message
+    //
     if (activator.classname == "player" && self.message != string_null)
     {
-        centerprint (activator, self.message);
-
+        centerprint(activator, self.message);
         if (!self.noise)
-            sound (activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
+            sound(activator, CHAN_VOICE, "misc/talk.wav", 1, ATTN_NORM);
     }
 
     //
@@ -265,12 +270,12 @@ void() SUB_UseTargets =
     //
     if (self.killtarget != string_null)
     {
-        t = find (world, targetname, self.killtarget);
+        t = find(world, targetname, self.killtarget);
 
-        while( t )
+        while(t)
         {
-            remove (t);
-            t = find (t, targetname, self.killtarget);
+            remove(t);
+            t = find(t, targetname, self.killtarget);
         }
     }
 
@@ -280,8 +285,8 @@ void() SUB_UseTargets =
     if (self.target != string_null)
     {
         act = activator;
-        t = find (world, targetname, self.target);
-        while( t )
+        t = find(world, targetname, self.target);
+        while(t)
         {
             stemp = self;
             otemp = other;
@@ -290,33 +295,33 @@ void() SUB_UseTargets =
             if (self.use != SUB_Null)
             {
                 if (self.use)
-                self.use ();
+                    self.use();
             }
             self = stemp;
             other = otemp;
             activator = act;
-            t = find (t, targetname, self.target);
+            t = find(t, targetname, self.target);
         }
     }
 };
+
 
 /*
 in nightmare mode, all attack_finished times become 0
 some monsters refire twice automatically
 update: not anymore! it makes nightmare too easy
 */
-
 void(float normal) SUB_AttackFinished =
 {
-    self.cnt = 0;		// refire count for nightmare
-
+    self.cnt = 0; // refire count for nightmare
     //if (skill != 3)
         self.attack_finished = time + normal;
 };
 
-float (entity targ) visible;
 
-void (void() thinkst) SUB_CheckRefire =
+float(entity targ) visible;
+
+void(void() thinkst) SUB_CheckRefire =
 {
     if (skill != 3)
         return;
@@ -324,7 +329,7 @@ void (void() thinkst) SUB_CheckRefire =
     if (self.cnt == 1)
         return;
 
-    if (!visible (self.enemy))
+    if (!visible(self.enemy))
         return;
 
     self.cnt = 1;
